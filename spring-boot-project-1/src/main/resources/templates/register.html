@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.css}" type="text/css" rel="stylesheet">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.js}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" th:src="@{/webjars/jquery/3.3.1-2/jquery.js}"></script>
+
+    <link th:href="@{/css/login.css}" type="text/css" rel="stylesheet" />
+
+
+</head>
+<body>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="wrapper fadeInDown">
+    <div id="formContent"  >
+        <!-- Tabs Titles -->
+
+        <!-- Icon -->
+        <div class="fadeIn first">
+            <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
+        </div>
+
+        </h2>
+        <!-- Register Form -->
+        <form th:action="@{/registered}" method="post">
+            <input type="text" class="fadeIn second" name="username" placeholder="login" th:placeholder="#{register.username}">
+            <input type="password" class="fadeIn third" name="password" placeholder="password" th:placeholder="#{register.password}">
+            <input type="text" class="fadeIn third" name="email" placeholder="name" th:placeholder="#{register.name}">
+            <input type="text" class="fadeIn third" name="name" placeholder="email" th:placeholder="#{register.email}">
+            <input type="submit" class="fadeIn fourth" value="Register" th:value="#{register.register}">
+        </form>
+
+
+    </div>
+    <label>
+        <a th:href="@{/register(l='zh_CN')}">中文</a>
+        <a th:href="@{/register(l='en_US')}">English</a>
+    </label>
+</div>
+</body>
+</html>

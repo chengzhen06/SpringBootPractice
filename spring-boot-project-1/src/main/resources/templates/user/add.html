@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin - Tables</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.css}" type="text/css" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link th:href="@{/css/sb-admin.css}" type="text/css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+<nav th:replace="~{commons::nav}">
+</nav>
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:replace="~{commons::sidebar(activeUri='tables')}">
+    </ul>
+
+    <div id="content-wrapper">
+
+        <div class="container-fluid">
+
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Tables</li>
+            </ol>
+
+            <!-- DataTables Example -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fas fa-table"></i>
+                    Data Table Example</div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <form th:href="@{/user}" method="post">
+                            <div class="form-group">
+                                <label th:text="#{home.table.username}"></label>
+                                <input  class="form-control" name="username" placeholder="name@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label th:text="#{home.table.password}"></label>
+                                <input type="password" class="form-control" name="password" placeholder="name@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label th:text="#{home.table.name}"></label>
+                                <input class="form-control" name="name" placeholder="name@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label th:text="#{home.table.email}"></label>
+                                <input type="email" class="form-control" name="email" placeholder="name@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label th:text="#{home.table.comment}">Example textarea</label>
+                                <textarea class="form-control" name="comment" rows="3"></textarea>
+                            </div>
+                            <button class="btn btn-light" type="submit" th:text="#{home.table.submit}" ></button>
+                        </form>
+                    </div>
+                </div>
+                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+            </div>
+
+            <p class="small text-center text-muted my-5">
+                <em>More table examples coming soon...</em>
+            </p>
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+        <footer th:replace="~{commons::footer}">
+        </footer>
+
+    </div>
+    <!-- /.content-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.js}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" th:src="@{/webjars/jquery/3.3.1-2/jquery.js}"></script>
+
+</body>
+
+</html>

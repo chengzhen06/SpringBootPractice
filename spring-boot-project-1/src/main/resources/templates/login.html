@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.css}" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.js}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" th:src="@{/webjars/jquery/3.3.1-2/jquery.js}"></script>
+
+    <link th:href="@{/css/login.css}" rel="stylesheet" />
+
+</head>
+<body>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="wrapper fadeInDown">
+    <div id="formContent"  >
+        <!-- Tabs Titles -->
+
+        <!-- Icon -->
+        <div class="fadeIn first">
+            <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
+        </div>
+
+        </h2>
+        <!-- Login Form -->
+        <form th:action="@{/loginCheck}" method="post">
+            <p style="color: red" th:text="#{login.errLogin}" th:if="${not #strings.isEmpty(errLogin)}"></p>
+            <p style="color: red" th:text="#{login.errUsername}" th:if="${not #strings.isEmpty(errUsername)}"></p>
+            <p style="color: red" th:text="#{login.errPassword}" th:if="${not #strings.isEmpty(errPassword)}"></p>
+            <input type="text" class="fadeIn second" name="username" placeholder="login" th:placeholder="#{login.username}">
+            <input type="password" class="fadeIn third" name="password" placeholder="password" th:placeholder="#{login.password}">
+            <input type="submit" class="fadeIn fourth" value="Log In" th:value="#{login.login}">
+        </form>
+        <form action="/register">
+            <input type="submit" class="fadeIn fourth" value="Register" th:value="#{login.register}">
+        </form>
+
+        <!-- Remind Passowrd -->
+        <div id="formFooter">
+            <a class="underlineHover" href="#">[[#{login.forgetPassword}]]</a>
+        </div>
+
+    </div>
+    <label>
+        <a th:href="@{/login(l='zh_CN')}">中文</a>
+        <a th:href="@{/login(l='en_US')}">English</a>
+    </label>
+</div>
+</body>
+</html>

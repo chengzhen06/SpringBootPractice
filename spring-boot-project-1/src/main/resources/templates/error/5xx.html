@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SB Admin - Charts</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.css}" type="text/css" rel="stylesheet">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.js}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" th:src="@{/webjars/jquery/3.3.1-2/jquery.js}"></script>
+
+    <!-- Custom styles for this template-->
+    <link th:href="@{/css/sb-admin.css}" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+<nav th:replace="~{commons::nav}">
+</nav>
+
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:replace="~{commons::sidebar(activeUri='charts')}">
+    </ul>
+
+    <div id="content-wrapper">
+
+        <div class="container-fluid">
+
+            <h1>Status: [[${status}]]</h1>
+            <h2>Timestamp: [[${timestamp}]]</h2>
+            <h2>Exception: [[${exception}]]</h2>
+            <h2>Message: [[${message}]]</h2>
+            <h2>Error: [[${error}]]</h2>
+            <h2>Additional Message: [[${ext.msg}]]</h2>
+
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+        <footer th:replace="~{commons::footer}">
+        </footer>
+
+    </div>
+    <!-- /.content-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+</body>
+
+</html>

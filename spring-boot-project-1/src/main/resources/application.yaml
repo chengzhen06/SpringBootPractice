@@ -1,0 +1,10 @@
+spring:
+  messages:
+    basename: lang.login, lang.register, lang.home
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: crawler
+  thymeleaf:
+    cache: false
