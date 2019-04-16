@@ -51,23 +51,24 @@
                         <form th:href="@{/user}" method="post">
                             <div class="form-group">
                                 <label th:text="#{home.table.username}"></label>
-                                <input  class="form-control" name="username" placeholder="name@example.com">
+                                <input  class="form-control" name="username" th:value="${user?.getUsername()}">
                             </div>
+                            <p style="color: red" th:text="#{register.usernameExist}" th:if="${not #strings.isEmpty(usernameExist)}"></p>
                             <div class="form-group">
                                 <label th:text="#{home.table.password}"></label>
-                                <input type="password" class="form-control" name="password" placeholder="name@example.com">
+                                <input type="password" class="form-control" name="password" th:value="${user?.getPassword()}">
                             </div>
                             <div class="form-group">
                                 <label th:text="#{home.table.name}"></label>
-                                <input class="form-control" name="name" placeholder="name@example.com">
+                                <input class="form-control" name="name" th:value="${user?.getName()}">
                             </div>
                             <div class="form-group">
                                 <label th:text="#{home.table.email}"></label>
-                                <input type="email" class="form-control" name="email" placeholder="name@example.com">
+                                <input type="email" class="form-control" name="email" placeholder="name@example.com" th:value="${user?.getEmail()}">
                             </div>
                             <div class="form-group">
                                 <label th:text="#{home.table.comment}">Example textarea</label>
-                                <textarea class="form-control" name="comment" rows="3"></textarea>
+                                <textarea class="form-control" name="comment" rows="3" th:text="${user?.getComment()}"></textarea>
                             </div>
                             <button class="btn btn-light" type="submit" th:text="#{home.table.submit}" ></button>
                         </form>

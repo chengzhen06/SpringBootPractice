@@ -12,7 +12,6 @@ import java.util.Map;
 
 @Controller
 public class LoginController {
-
     @Autowired
     UserRepo userRepo;
 
@@ -20,9 +19,9 @@ public class LoginController {
     public String login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
                         Map<String, Object> error,
-                        HttpSession httpSession)
-    {
+                        HttpSession httpSession){
         User user = userRepo.findByUsername(username);
+
         if(user == null)
         {
             error.put("errUsername","用户名错误");

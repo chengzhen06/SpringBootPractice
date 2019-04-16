@@ -87,6 +87,9 @@
                   </tr>
                 </tbody>
               </table>
+              page: <a th:each="i:${#numbers.sequence(0,pages-1)}" th:href="@{/users/}+${i}">
+                [[${i+1}]]
+              </a>
             </div>
           </div>
           <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>

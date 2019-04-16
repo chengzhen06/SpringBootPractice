@@ -25,9 +25,6 @@ public class SpringBootProject1Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        for(User user: userRepo.findAll())
-        {
-            System.out.println(user);
-        }
+
     }
 }

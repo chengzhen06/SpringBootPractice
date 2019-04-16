@@ -24,10 +24,10 @@
             <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
         </div>
 
-        </h2>
         <!-- Register Form -->
-        <form th:action="@{/registered}" method="post">
+        <form th:action="@{/registerCheck}" method="post">
             <input type="text" class="fadeIn second" name="username" placeholder="login" th:placeholder="#{register.username}">
+            <p style="color: red" th:text="#{register.usernameExist}" th:if="${not #strings.isEmpty(usernameExist)}"></p>
             <input type="password" class="fadeIn third" name="password" placeholder="password" th:placeholder="#{register.password}">
             <input type="text" class="fadeIn third" name="email" placeholder="name" th:placeholder="#{register.name}">
             <input type="text" class="fadeIn third" name="name" placeholder="email" th:placeholder="#{register.email}">

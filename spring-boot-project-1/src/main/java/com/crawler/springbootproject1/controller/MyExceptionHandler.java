@@ -21,4 +21,12 @@ public class MyExceptionHandler {
         httpServletRequest.setAttribute("ext", map);
         return "forward:/error";
     }
+
+    @ExceptionHandler(Exception.class)
+    public String handleAllException(Exception e, HttpServletRequest httpServletRequest){
+        Map<String, Object> map = new HashMap<>();
+        map.put("msg",e.getMessage());
+        httpServletRequest.setAttribute("ext", map);
+        return "forward:/error";
+    }
 }

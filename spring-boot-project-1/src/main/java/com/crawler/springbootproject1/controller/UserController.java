@@ -4,12 +4,14 @@ import com.crawler.springbootproject1.bean.User;
 import com.crawler.springbootproject1.exception.UserNotExistException;
 import dbms.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 @Controller
 public class UserController {
@@ -17,10 +19,13 @@ public class UserController {
     @Autowired
     UserRepo userRepo;
 
-    @GetMapping("/users")
-    public String getUserByPage(Model model){
-        List<User> users = userRepo.findAll();
+    @GetMapping("/users/{page}")
+    public String getUserByPage(@PathVariable int page, Model model){
+        int dataPerPage = 10;
+        Page<User> users = userRepo.findAll(PageRequest.of(page,dataPerPage));
+        long count = userRepo.count();
         model.addAttribute("users", users);
+        model.addAttribute("pages", (count+9)/dataPerPage);
         return "user/tables";
     }
 
@@ -40,11 +45,16 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public String addUser(User user){
+    public String addUser(User user, Map<String, Object> error, Model model){
+        if(userRepo.findByUsername(user.getUsername()) != null){
+            error.put("usernameExist","usernameExist");
+            model.addAttribute("user", user);
+            return toAddPage();
+        }
         user.setId(Integer.toString((int)(Math.random()*1000000)));
         user.setRegisterDate(new Date());
         userRepo.save(user);
-        return "redirect:/users";
+        return "redirect:/users/0";
     }
 
     @PutMapping("/user/{id}")
@@ -52,13 +62,13 @@ public class UserController {
         User oldUser = userRepo.findById(user.getId());
         user.setRegisterDate(oldUser.getRegisterDate());
         userRepo.save(user);
-        return "redirect:/users";
+        return "redirect:/users/0";
     }
 
     @DeleteMapping("/user/{id}")
     public String deleteUser(@PathVariable("id") String id){
         User user = userRepo.findById(id);
         userRepo.delete(user);
-        return "redirect:/users";
+        return "redirect:/users/0";
     }
 }

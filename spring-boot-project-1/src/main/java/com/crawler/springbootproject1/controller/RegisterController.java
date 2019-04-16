@@ -4,18 +4,19 @@ import com.crawler.springbootproject1.bean.User;
 import dbms.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Map;
 
 @Controller
 public class RegisterController {
     @Autowired
     UserRepo userRepo;
 
-    @RequestMapping("/registered")
-    public String registered(HttpServletRequest httpServletRequest){
+    @PostMapping("/registerCheck")
+    public String registered(HttpServletRequest httpServletRequest, Map<String, Object> error){
         User user = new User();
         user.setId(Integer.toString((int)(Math.random()*1000000)));
         user.setUsername(httpServletRequest.getParameter("username"));
@@ -23,6 +24,10 @@ public class RegisterController {
         user.setEmail(httpServletRequest.getParameter("email"));
         user.setName(httpServletRequest.getParameter("name"));
         user.setRegisterDate(new Date());
+        if(userRepo.findByUsername(user.getUsername()) != null){
+            error.put("usernameExist","usernameExist");
+            return "register";
+        }
         userRepo.save(user);
         return "login";
     }

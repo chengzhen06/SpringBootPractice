@@ -23,7 +23,6 @@
             <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
         </div>
 
-        </h2>
         <!-- Login Form -->
         <form th:action="@{/loginCheck}" method="post">
             <p style="color: red" th:text="#{login.errLogin}" th:if="${not #strings.isEmpty(errLogin)}"></p>
