@@ -10,8 +10,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 public class UserController {
@@ -20,11 +26,30 @@ public class UserController {
     UserRepo userRepo;
 
     @GetMapping("/users/{page}")
-    public String getUserByPage(@PathVariable int page, Model model){
+    public String getUserByPage(@PathVariable int page, Model model, HttpServletRequest httpServletRequest){
         int dataPerPage = 10;
         Page<User> users = userRepo.findAll(PageRequest.of(page,dataPerPage));
         long count = userRepo.count();
-        model.addAttribute("users", users);
+        Optional<String> id = Optional.ofNullable(httpServletRequest.getParameter("id"));
+        Optional<String> username = Optional.ofNullable(httpServletRequest.getParameter("username"));
+        Optional<String> name = Optional.ofNullable(httpServletRequest.getParameter("name"));
+        Optional<String> email = Optional.ofNullable(httpServletRequest.getParameter("email"));
+       // Optional<Date> regDate = Optional.ofNullable(httpServletRequest.getParameter("regDate"));
+        Optional<String> comment = Optional.ofNullable(httpServletRequest.getParameter("comment"));
+        BiPredicate<Boolean, Boolean> method = (b1, b2) -> b1&b2;
+        List<User> filterUsers = users.stream()
+                .filter(u -> {
+                    boolean flag = true;
+                    flag = method.test(flag, u.getId().contains(id.orElse("")));
+                    flag = method.test(flag, u.getUsername().contains(username.orElse("")));
+                    flag = method.test(flag, u.getName().contains(name.orElse("")));
+                    flag = method.test(flag, u.getEmail().contains(email.orElse("")));
+                    flag = method.test(flag, u.getComment().contains(comment.orElse("")));
+                    System.out.println(u);
+                    return flag;
+                })
+                .collect(Collectors.toList());
+        model.addAttribute("users", filterUsers);
         model.addAttribute("pages", (count+9)/dataPerPage);
         return "user/tables";
     }

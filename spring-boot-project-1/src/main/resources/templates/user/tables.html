@@ -52,6 +52,18 @@
               <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                   <tr>
+                    <form th:action="@{/users/0}" method="get">
+                      <p th:text="#{home.table.filter}"></p>
+                      <th><input type="text" name="id" th:placeholder="#{home.table.id}"></th>
+                      <th><input type="text" name="username" th:placeholder="#{home.table.username}"></th>
+                      <th><input type="text" name="name" th:placeholder="#{home.table.name}"></th>
+                      <th><input type="text" name="email" th:placeholder="#{home.table.email}"></th>
+                      <th><input type="text" name="regDate" th:placeholder="#{home.table.registerDate}"></th>
+                      <th><input type="text" name="comment" th:placeholder="#{home.table.comment}"></th>
+                      <th><input type="submit" th:placeholder="#{home.table.filter}"></th>
+                    </form>
+                  </tr>
+                  <tr>
                     <th th:text="#{home.table.id}"></th>
                     <th th:text="#{home.table.username}"></th>
                     <th th:text="#{home.table.name}"></th>
