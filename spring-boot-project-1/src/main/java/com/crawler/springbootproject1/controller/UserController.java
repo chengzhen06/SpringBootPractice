@@ -17,41 +17,63 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 public class UserController {
 
     @Autowired
     UserRepo userRepo;
+    int dataPerPage = 10;
 
     @GetMapping("/users/{page}")
     public String getUserByPage(@PathVariable int page, Model model, HttpServletRequest httpServletRequest){
-        int dataPerPage = 10;
-        Page<User> users = userRepo.findAll(PageRequest.of(page,dataPerPage));
-        long count = userRepo.count();
+        //Page<User> users = userRepo.findAll(PageRequest.of(page, dataPerPage));
+        List<User> filterUsers = filter(httpServletRequest);
+        long count = filterUsers.size();
+        filterUsers = filterUsers.subList(page*dataPerPage, page*dataPerPage+10);
+        model.addAttribute("users", filterUsers);
+        model.addAttribute("pages", (count+9)/dataPerPage);
+        return "user/tables";
+    }
+
+    public List<User> filter(HttpServletRequest httpServletRequest){
         Optional<String> id = Optional.ofNullable(httpServletRequest.getParameter("id"));
         Optional<String> username = Optional.ofNullable(httpServletRequest.getParameter("username"));
         Optional<String> name = Optional.ofNullable(httpServletRequest.getParameter("name"));
         Optional<String> email = Optional.ofNullable(httpServletRequest.getParameter("email"));
-       // Optional<Date> regDate = Optional.ofNullable(httpServletRequest.getParameter("regDate"));
+        // Optional<Date> regDate = Optional.ofNullable(httpServletRequest.getParameter("regDate"));
         Optional<String> comment = Optional.ofNullable(httpServletRequest.getParameter("comment"));
-        BiPredicate<Boolean, Boolean> method = (b1, b2) -> b1&b2;
-        List<User> filterUsers = users.stream()
+        Optional<String> filterMethod = Optional.ofNullable(httpServletRequest.getParameter("filterMethod"));
+
+        BiPredicate<Boolean, Boolean> method;
+        BiPredicate<String, String> compareString;
+        if(filterMethod.orElse("and").equals("and")){
+            method = (b1, b2) -> b1&b2;
+            compareString = (s1, s2) -> s1.contains(s2);
+        }
+        else{
+            method = (b1, b2) -> b1|b2;
+            compareString = (s1, s2) -> {
+                if(s2 == "")
+                    return false;
+                return s1.contains(s2);
+            };
+        }
+
+        List<User> filterUsers = userRepo.findAll().stream()
                 .filter(u -> {
-                    boolean flag = true;
-                    flag = method.test(flag, u.getId().contains(id.orElse("")));
-                    flag = method.test(flag, u.getUsername().contains(username.orElse("")));
-                    flag = method.test(flag, u.getName().contains(name.orElse("")));
-                    flag = method.test(flag, u.getEmail().contains(email.orElse("")));
-                    flag = method.test(flag, u.getComment().contains(comment.orElse("")));
-                    System.out.println(u);
+                    boolean flag = false;
+                    if(filterMethod.orElse("and").equals("and"))
+                        flag = true;
+                    flag = method.test(flag, compareString.test(u.getId(),id.orElse("")));
+                    flag = method.test(flag, compareString.test(u.getUsername(), username.orElse("")));
+                    flag = method.test(flag, compareString.test(u.getName(), name.orElse("")));
+                    flag = method.test(flag, compareString.test(u.getEmail(), email.orElse("")));
+                    flag = method.test(flag, compareString.test(u.getComment(), comment.orElse("")));
                     return flag;
                 })
                 .collect(Collectors.toList());
-        model.addAttribute("users", filterUsers);
-        model.addAttribute("pages", (count+9)/dataPerPage);
-        return "user/tables";
+        return filterUsers;
     }
 
     @GetMapping("/user")
