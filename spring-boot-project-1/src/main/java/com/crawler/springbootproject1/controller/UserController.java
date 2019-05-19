@@ -28,15 +28,16 @@ public class UserController {
     @GetMapping("/users/{page}")
     public String getUserByPage(@PathVariable int page, Model model, HttpServletRequest httpServletRequest){
         //Page<User> users = userRepo.findAll(PageRequest.of(page, dataPerPage));
-        List<User> filterUsers = filter(httpServletRequest);
+        List<User> filterUsers = filter(model, httpServletRequest);
         long count = filterUsers.size();
-        filterUsers = filterUsers.subList(page*dataPerPage, page*dataPerPage+10);
+        int limit = (page*dataPerPage+dataPerPage)<filterUsers.size()?(page*dataPerPage+dataPerPage):filterUsers.size();
+        filterUsers = filterUsers.subList(page*dataPerPage, limit);
         model.addAttribute("users", filterUsers);
         model.addAttribute("pages", (count+9)/dataPerPage);
         return "user/tables";
     }
 
-    public List<User> filter(HttpServletRequest httpServletRequest){
+    public List<User> filter(Model model, HttpServletRequest httpServletRequest){
         Optional<String> id = Optional.ofNullable(httpServletRequest.getParameter("id"));
         Optional<String> username = Optional.ofNullable(httpServletRequest.getParameter("username"));
         Optional<String> name = Optional.ofNullable(httpServletRequest.getParameter("name"));
@@ -44,6 +45,12 @@ public class UserController {
         // Optional<Date> regDate = Optional.ofNullable(httpServletRequest.getParameter("regDate"));
         Optional<String> comment = Optional.ofNullable(httpServletRequest.getParameter("comment"));
         Optional<String> filterMethod = Optional.ofNullable(httpServletRequest.getParameter("filterMethod"));
+        model.addAttribute("id", id.orElse(""));
+        model.addAttribute("username", username.orElse(""));
+        model.addAttribute("name", name.orElse(""));
+        model.addAttribute("email", email.orElse(""));
+        model.addAttribute("comment", comment.orElse(""));
+        model.addAttribute("filterMethod", filterMethod.orElse(""));
 
         BiPredicate<Boolean, Boolean> method;
         BiPredicate<String, String> compareString;

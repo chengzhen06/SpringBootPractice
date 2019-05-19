@@ -57,16 +57,16 @@
                     </td>
                   </tr>
                   <tr>
-                    <form th:action="@{/users/0}" method="get">
-                      <td><input type="text" name="id" th:placeholder="#{home.table.id}"></td>
-                      <td><input type="text" name="username" th:placeholder="#{home.table.username}"></td>
-                      <td><input type="text" name="name" th:placeholder="#{home.table.name}"></td>
-                      <td><input type="text" name="email" th:placeholder="#{home.table.email}"></td>
+                    <form id="filter" th:action="@{/users/0}" method="get">
+                      <td><input type="text" name="id" th:placeholder="#{home.table.id}" th:value="${id}"></td>
+                      <td><input type="text" name="username" th:placeholder="#{home.table.username}" th:value="${username}"></td>
+                      <td><input type="text" name="name" th:placeholder="#{home.table.name}" th:value="${name}"></td>
+                      <td><input type="text" name="email" th:placeholder="#{home.table.email}" th:value="${email}"></td>
                       <td><input type="text" name="regDate" th:placeholder="#{home.table.registerDate}"></td>
-                      <td><input type="text" name="comment" th:placeholder="#{home.table.comment}"></td>
+                      <td><input type="text" name="comment" th:placeholder="#{home.table.comment}" th:value="${comment}"></td>
                       <td>
-                        <input type="radio" name="filterMethod" value="and" checked> and<br>
-                        <input type="radio" name="filterMethod" value="or"> or
+                        <input type="radio" name="filterMethod" value="and" th:checked="${filterMethod}=='and' or ${filterMethod} ==''"> and<br>
+                        <input type="radio" name="filterMethod" value="or" th:checked="${filterMethod}=='or'"> or
                       </td>
                       <td>
                         <button type="submit" th:text="#{home.table.filter}"></button>
@@ -109,9 +109,9 @@
                   </tr>
                 </tbody>
               </table>
-              page: <a th:each="i:${#numbers.sequence(0,pages-1)}" th:href="@{/users/}+${i}">
+              page: <button class="switchPage" th:each="i:${#numbers.sequence(0,pages-1)}" th:attr="page=@{/users/}+${i}">
                 [[${i+1}]]
-              </a>
+              </button>
             </div>
           </div>
           <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
@@ -141,6 +141,10 @@
   <script>
     $(".deleteBtn").click(function(){
       $("#deleteUserForm").attr("action",$(this).attr("delUri")).submit();
+    })
+
+    $(".switchPage").click(function(){
+        $("#filter").attr("action",$(this).attr("page")).submit();
     })
   </script>
 
