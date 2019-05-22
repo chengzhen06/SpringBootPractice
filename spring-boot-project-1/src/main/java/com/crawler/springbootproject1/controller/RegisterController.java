@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public class RegisterController {
         user.setPassword(httpServletRequest.getParameter("password"));
         user.setEmail(httpServletRequest.getParameter("email"));
         user.setName(httpServletRequest.getParameter("name"));
-        user.setRegisterDate(new Date());
+        user.setRegisterDate(LocalDate.now());
         if(userRepo.findByUsername(user.getUsername()) != null){
             error.put("usernameExist","usernameExist");
             return "register";

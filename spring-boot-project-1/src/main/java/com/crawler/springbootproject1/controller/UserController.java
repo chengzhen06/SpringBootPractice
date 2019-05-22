@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,7 @@ public class UserController {
         filterUsers = filterUsers.subList(page*dataPerPage, limit);
         model.addAttribute("users", filterUsers);
         model.addAttribute("pages", (count+9)/dataPerPage);
+        model.addAttribute("curPage", page);
         return "user/tables";
     }
 
@@ -42,18 +45,23 @@ public class UserController {
         Optional<String> username = Optional.ofNullable(httpServletRequest.getParameter("username"));
         Optional<String> name = Optional.ofNullable(httpServletRequest.getParameter("name"));
         Optional<String> email = Optional.ofNullable(httpServletRequest.getParameter("email"));
-        // Optional<Date> regDate = Optional.ofNullable(httpServletRequest.getParameter("regDate"));
+        Optional<String> regDateBefore = Optional.ofNullable(httpServletRequest.getParameter("regDateBefore"));
+        Optional<String> regDateAfter = Optional.ofNullable(httpServletRequest.getParameter("regDateAfter"));
         Optional<String> comment = Optional.ofNullable(httpServletRequest.getParameter("comment"));
         Optional<String> filterMethod = Optional.ofNullable(httpServletRequest.getParameter("filterMethod"));
         model.addAttribute("id", id.orElse(""));
         model.addAttribute("username", username.orElse(""));
         model.addAttribute("name", name.orElse(""));
         model.addAttribute("email", email.orElse(""));
+        model.addAttribute("regDateBefore", regDateBefore.orElse(""));
+        model.addAttribute("regDateAfter", regDateAfter.orElse(""));
         model.addAttribute("comment", comment.orElse(""));
         model.addAttribute("filterMethod", filterMethod.orElse(""));
 
         BiPredicate<Boolean, Boolean> method;
         BiPredicate<String, String> compareString;
+        BiPredicate<LocalDate, LocalDate> dateCompare = (d1, d2) -> d1.isAfter(d2);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         if(filterMethod.orElse("and").equals("and")){
             method = (b1, b2) -> b1&b2;
             compareString = (s1, s2) -> s1.contains(s2);
@@ -77,6 +85,10 @@ public class UserController {
                     flag = method.test(flag, compareString.test(u.getName(), name.orElse("")));
                     flag = method.test(flag, compareString.test(u.getEmail(), email.orElse("")));
                     flag = method.test(flag, compareString.test(u.getComment(), comment.orElse("")));
+                    LocalDate dateBefore = LocalDate.parse(regDateBefore.orElse("1970-01-01"), dtf).minusDays(1);
+                    LocalDate dateAfter = LocalDate.parse(regDateAfter.orElse("2100-01-01"), dtf).plusDays(1);
+                    boolean range = dateCompare.test(u.getRegisterDate(), dateBefore) & dateCompare.test(dateAfter, u.getRegisterDate());
+                    flag = method.test(flag, range);
                     return flag;
                 })
                 .collect(Collectors.toList());
@@ -106,7 +118,7 @@ public class UserController {
             return toAddPage();
         }
         user.setId(Integer.toString((int)(Math.random()*1000000)));
-        user.setRegisterDate(new Date());
+        user.setRegisterDate(LocalDate.now());
         userRepo.save(user);
         return "redirect:/users/0";
     }

@@ -2,8 +2,9 @@ package com.crawler.springbootproject1.bean;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 
 @Document(collection = "user")
@@ -16,7 +17,8 @@ public class User {
     private String password;
     private String email;
     private String name;
-    private Date registerDate;
+    @DateTimeFormat(pattern = "MM-dd-yyyy")
+    private LocalDate registerDate;
     private String comment;
 
     public String getComment() { return comment;  }
@@ -63,11 +65,11 @@ public class User {
         this.name = name;
     }
 
-    public Date getRegisterDate() {
+    public LocalDate getRegisterDate() {
         return registerDate;
     }
 
-    public void setRegisterDate(Date registerDate) {
+    public void setRegisterDate(LocalDate registerDate) {
         this.registerDate = registerDate;
     }
 
