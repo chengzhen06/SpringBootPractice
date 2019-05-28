@@ -39,6 +39,11 @@ public class UserController {
         model.addAttribute("curPage", page);
         return "user/tables";
     }
+    @GetMapping("/users/{page}/{type}")
+    public String getUserByPagePHP(@PathVariable int page, @PathVariable String type, Model model, HttpServletRequest httpServletRequest){
+        getUserByPage(page, model, httpServletRequest);
+        return "user/tablesPHP";
+    }
 
     public List<User> filter(Model model, HttpServletRequest httpServletRequest){
         Optional<String> id = Optional.ofNullable(httpServletRequest.getParameter("id"));

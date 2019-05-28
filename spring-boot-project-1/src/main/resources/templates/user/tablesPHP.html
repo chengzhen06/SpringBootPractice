@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>SB Admin - Tables</title>
+
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.css}" type="text/css" rel="stylesheet">
+
+  <!-- Custom styles for this template-->
+  <link th:href="@{/css/sb-admin.css}" type="text/css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <nav th:replace="~{commons::nav}">
+    </nav>
+
+    <div id="wrapper">
+
+      <!-- Sidebar -->
+      <ul th:replace="~{commons::sidebar(activeUri='user/tablesPHP')}">
+      </ul>
+
+    <div id="content-wrapper">
+
+      <div class="container-fluid">
+
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="#">Dashboard</a>
+          </li>
+          <li class="breadcrumb-item active">Tables</li>
+        </ol>
+
+        <!-- DataTables Example -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <i class="fas fa-table"></i>
+            Data Table Example</div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <a class="btn btn-sm btn-success" th:href="@{/user}" th:text="#{home.table.add}"></a>
+              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                    <td colspan="8">
+                      <span th:text="#{home.table.filter}"></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <form id="filter" th:action="@{/users/0}" method="get">
+
+                      <td>
+                          ID:<br>
+                          <input type="text" name="id" th:placeholder="#{home.table.id}" th:value="${id}">
+                      </td>
+                      <td>
+                          Username:<br>
+                          <input type="text" name="username" th:placeholder="#{home.table.username}" th:value="${username}">
+                      </td>
+                      <td>
+                          Name:<br>
+                          <input type="text" name="name" th:placeholder="#{home.table.name}" th:value="${name}">
+                      </td>
+                      <td>
+                          Email:<br>
+                          <input type="text" name="email" th:placeholder="#{home.table.email}" th:value="${email}">
+                      </td>
+                      <td>
+                          Date range:<br>
+                          <input type="date" name="regDateBefore" th:value="${regDateBefore==''?'2019-04-01':regDateBefore}" >
+                          <input type="date" name="regDateAfter" th:value="${regDateAfter==''?#dates.format(#dates.createNow(),'yyyy-MM-dd'):regDateAfter}">
+                      </td>
+                      <td>
+                          Comment:<br>
+                          <input type="text" name="comment" th:placeholder="#{home.table.comment}" th:value="${comment}">
+                      </td>
+                      <td>
+                        <input type="radio" name="filterMethod" value="and" th:checked="${filterMethod}=='and' or ${filterMethod} ==''"> and<br>
+                        <input type="radio" name="filterMethod" value="or" th:checked="${filterMethod}=='or'"> or
+                      </td>
+                      <td>
+                        <button type="submit" th:text="#{home.table.filter}"></button>
+                      </td>
+                    </form>
+                  </tr>
+                  <tr>
+                    <th th:text="#{home.table.id}"></th>
+                    <th th:text="#{home.table.username}"></th>
+                    <th th:text="#{home.table.name}"></th>
+                    <th th:text="#{home.table.email}"></th>
+                    <th th:text="#{home.table.registerDate}"></th>
+                    <th th:text="#{home.table.comment}"></th>
+                    <th colspan="2" th:text="#{home.table.action}"></th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th th:text="#{home.table.id}"></th>
+                    <th th:text="#{home.table.username}"></th>
+                    <th th:text="#{home.table.name}"></th>
+                    <th th:text="#{home.table.email}"></th>
+                    <th th:text="#{home.table.registerDate}"></th>
+                    <th th:text="#{home.table.comment}"></th>
+                    <th colspan="2" th:text="#{home.table.action}"></th>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr th:each="user:${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.email}"></td>
+                    <!--<td th:text="${#dates.format(user.registerDate,'yyyy-MM-dd')}"></td>-->
+                      <td th:text="${user.registerDate}"></td>
+                    <td th:text="${user.comment}"></td>
+                    <td colspan="2">
+                      <a class="btn btn-sm btn-info" th:href="@{/user/}+${user.id}" th:text="#{home.table.modify}"></a>
+                      <button type="submit" class="btn btn-sm btn-danger deleteBtn" th:attr="delUri=@{/user/}+${user.id}" th:text="#{home.table.delete}"></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              page: <button th:class="${i==curPage?'btn btn-primary disabled':'btn btn-primary switchPage'}" th:each="i:${#numbers.sequence(0,pages-1)}" th:attr="page=@{/users/}+${i}+@{/php}">
+                [[${i+1}]]
+              </button>
+            </div>
+          </div>
+          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        </div>
+        <form id="deleteUserForm" method="post">
+          <input type="hidden" name="_method" value="delete">
+        </form>
+
+      </div>
+      <!-- /.container-fluid -->
+
+      <!-- Sticky Footer -->
+      <footer th:replace="~{commons::footer}">
+      </footer>
+
+    </div>
+    <!-- /.content-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.js}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" th:src="@{/webjars/jquery/3.3.1-2/jquery.js}"></script>
+
+
+  <!--统一化表单删除-->
+  <script>
+    $(".deleteBtn").click(function(){
+      $("#deleteUserForm").attr("action",$(this).attr("delUri")).submit();
+    })
+
+    $(".switchPage").click(function(){
+        $("#filter").attr("action",$(this).attr("page")).submit();
+    })
+  </script>
+
+</body>
+
+</html>
